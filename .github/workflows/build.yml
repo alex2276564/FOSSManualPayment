@@ -23,7 +23,10 @@ jobs:
       - name: Move FOSSManualPayment.png
         run: mv FOSSManualPayment.png data/assets/gateways/
 
+      - name: Create release archive
+        run: zip -r FOSSManualPayment.zip library data
+        
       - uses: actions/upload-artifact@v3
         with:
           name: FOSSManualPayment
-          path: FOSSManualPayment
+          path: FOSSManualPayment.zip
