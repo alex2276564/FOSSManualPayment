@@ -32,10 +32,6 @@
 - **PHP Versions:** 7.4 and newer
 - **FOSSBilling:** Latest version
 
-## ⚠️ Important Note about Form Length
-
-For each payment method **you need to use a separate form in the configuration**. If you use one form for all methods with a large amount of text, it can lead to infinite page loading.
-
 ## 🖥️ Configuration Examples
 
 Here are some examples of how you can configure the custom HTML field for different payment methods:
@@ -75,7 +71,10 @@ Include contact information
 Embed external content
 ```
 
-**Important:** If you are not using all the available custom instruction fields, make sure to insert a single space in each unused field to avoid validation errors.
+## 📝 Important Notes
+
+* **Form Length:** For each payment method, use a separate form in the configuration. Long text in a single form can cause infinite page loading.
+* **Unused Fields:** If you are not using all custom instruction fields, insert a single space in each unused field to avoid validation errors. This is a temporary workaround.
 
 ## 🆘 Support
 
