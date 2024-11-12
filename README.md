@@ -1,7 +1,7 @@
 # FOSSManualPayment for FOSSBilling 💳
 
-[![PHP Version](https://img.shields.io/badge/PHP-7.4%2B-blue)](https://www.php.net/downloads.php)
 [![FOSSBilling Version](https://img.shields.io/badge/FOSSBilling-Latest-green)](https://fossbilling.org/)
+[![PHP Version](https://img.shields.io/badge/PHP-7.4%2B-8892BF)](https://www.php.net/downloads.php)
 [![Version](https://img.shields.io/github/v/release/alex2276564/FOSSManualPayment?color=blue)](https://github.com/alex2276564/FOSSManualPayment/releases/latest)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
