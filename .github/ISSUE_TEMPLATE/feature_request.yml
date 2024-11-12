@@ -1,0 +1,26 @@
+name: Feature Request
+description: Suggest an idea for FOSSManualPayment
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: "Thanks for helping improve FOSSManualPayment!"
+
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Feature Description
+      description: Describe the feature you'd like to see added
+      placeholder: A clear description of what you want to happen
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use Case
+      description: Describe how this feature would be useful
+      placeholder: "This feature would help when..."
+    validations:
+      required: true

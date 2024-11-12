@@ -1,0 +1,29 @@
+name: Build FOSSManualPayment
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Create directories
+        run: mkdir -p library/Payment/Adapter data/assets/gateways
+
+      - name: Move FOSSManualPayment.php
+        run: mv FOSSManualPayment.php library/Payment/Adapter/
+
+      - name: Move FOSSManualPayment.png
+        run: mv FOSSManualPayment.png data/assets/gateways/
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: FOSSManualPayment
+          path: FOSSManualPayment

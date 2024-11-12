@@ -1,0 +1,9 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://github.com/alex2276564/FOSSManualPayment#readme
+    about: Check out the documentation for installation and configuration guide
+
+  - name: FOSSBilling Documentation
+    url: https://fossbilling.org/docs
+    about: Official FOSSBilling documentation
