@@ -26,7 +26,7 @@ jobs:
       - name: Create release archive
         run: zip -r FOSSManualPayment.zip library data
         
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: FOSSManualPayment
           path: FOSSManualPayment.zip
