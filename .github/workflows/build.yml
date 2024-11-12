@@ -23,7 +23,7 @@ jobs:
       - name: Move FOSSManualPayment.png
         run: mv FOSSManualPayment.png data/assets/gateways/
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: FOSSManualPayment
           path: FOSSManualPayment
