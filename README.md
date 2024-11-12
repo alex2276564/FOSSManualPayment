@@ -18,7 +18,7 @@
 
 1. **Ensure you have FOSSBilling installed on your server (latest version).**
 
-2. **Download the latest release archive (`FOSSManualPayment.zip`) from the Releases section.**
+2. **Download the latest release archive (`FOSSManualPayment.zip`) from the [Releases](https://github.com/alex2276564/FOSSManualPayment/releases) section.**
 
 3. **Extract the contents of the archive and drag and drop (or upload) the `library` and `data` folders into the root directory of your FOSSBilling installation.**  This will place the necessary files in the correct locations.
 
