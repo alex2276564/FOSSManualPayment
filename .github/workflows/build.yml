@@ -2,13 +2,23 @@ name: Build FOSSManualPayment
 
 on:
   push:
-    branches:
-      - main
   pull_request:
-    branches:
-      - main
 
 jobs:
+  lint-markdown:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Lint Markdown files
+        uses: DavidAnson/markdownlint-cli2-action@v19
+        with:
+          globs: '**/*.md' # Checks all Markdown files in the repository
+          fix: true # automatically fixes simple problems
+          config: '.markdownlint.jsonc'  # if you have a configuration file
+#        continue-on-error: true  # to prevent the build from crashing due to errors in the documentation
+
+
   build:
     runs-on: ubuntu-latest
     steps:
