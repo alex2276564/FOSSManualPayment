@@ -5,6 +5,20 @@ on:
   pull_request:
 
 jobs:
+
+  php-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: PHP Syntax Check
+        run: |
+          find . -name "*.php" -print0 | xargs -0 -n1 php -l
+          if [ $? -ne 0 ]; then
+            echo "PHP syntax check failed"
+            exit 1
+          fi
+          
   lint-markdown:
     runs-on: ubuntu-latest
     steps:
