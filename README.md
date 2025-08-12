@@ -73,8 +73,8 @@ Embed external content
 
 ## 📝 Important Notes
 
-* **Form Length:** For each payment method, use a separate form in the configuration. Long text in a single form can cause infinite page loading.
-* **Unused Fields:** If you are not using all custom instruction fields, insert a single space in each unused field to avoid validation errors. This is a temporary workaround.
+- **Form Length:** For each payment method, use a separate form in the configuration. Long text in a single form can cause infinite page loading.
+- **Unused Fields:** If you are not using all custom instruction fields, insert a single space in each unused field to avoid validation errors. This is a temporary workaround.
 
 ## 🆘 Support
 
