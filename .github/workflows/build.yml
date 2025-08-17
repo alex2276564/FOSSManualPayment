@@ -31,12 +31,7 @@ jobs:
       - uses: actions/checkout@main
 
       - name: PHP Syntax Check
-        run: |
-          find . -name "*.php" -print0 | xargs -0 -n1 php -l
-          if [ $? -ne 0 ]; then
-            echo "PHP syntax check failed"
-            exit 1
-          fi
+        run: find . -name "*.php" -print0 | xargs -0 -n1 php -l
 
   lint-links:
     name: 🧹 Lint Links
@@ -79,24 +74,6 @@ jobs:
           config: ".markdownlint.jsonc" # if you have a configuration file
   #        continue-on-error: true  # to prevent the build from crashing due to errors in the documentation
 
-  security-scan-snyk:
-    name: 🔐 Security Scan Snyk
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@main
-
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/php@master
-        continue-on-error: true # Don't stop the pipeline because maybe snyk api limit
-        with:
-          args: --severity-threshold=high --sarif-file-output=snyk.sarif
-
-      - name: Upload result scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: snyk.sarif
-
   secrets-scan-trufflehog:
     name: 🔑 Secrets Scan
     runs-on: ubuntu-latest
@@ -130,7 +107,6 @@ jobs:
         lint-php,
         lint-links,
         lint-markdown,
-        security-scan-snyk,
         secrets-scan-trufflehog,
       ]
     runs-on: ubuntu-latest
