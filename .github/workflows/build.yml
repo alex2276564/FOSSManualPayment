@@ -7,7 +7,22 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
+  lint-actions:
+    name: 🧹 Lint Actions
+    runs-on: ubuntu-latest
+
+    permissions:
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@main
+
+      - uses: devops-actions/actionlint@main
+
   lint-php:
     name: 🧹 Lint PHP
     runs-on: ubuntu-latest
@@ -22,6 +37,32 @@ jobs:
             echo "PHP syntax check failed"
             exit 1
           fi
+
+  lint-links:
+    name: 🧹 Lint Links
+    runs-on: ubuntu-latest
+
+    permissions:
+      checks: write
+
+    steps:
+      - uses: actions/checkout@main
+
+      - name: Lint Links (push)
+        if: github.event_name != 'pull_request'
+        uses: umbrelladocs/action-linkspector@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-check
+          fail_level: error
+
+      - name: Lint Links (PR)
+        if: github.event_name == 'pull_request'
+        uses: umbrelladocs/action-linkspector@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          fail_level: error
 
   lint-markdown:
     name: 🧹 Lint Markdown
@@ -38,7 +79,25 @@ jobs:
           config: ".markdownlint.jsonc" # if you have a configuration file
   #        continue-on-error: true  # to prevent the build from crashing due to errors in the documentation
 
-  secrets-scan:
+  security-scan-snyk:
+    name: 🔐 Security Scan Snyk
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@main
+
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/php@master
+        continue-on-error: true # Don't stop the pipeline because maybe snyk api limit
+        with:
+          args: --severity-threshold=high --sarif-file-output=snyk.sarif
+
+      - name: Upload result scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: snyk.sarif
+
+  secrets-scan-trufflehog:
     name: 🔑 Secrets Scan
     runs-on: ubuntu-latest
 
@@ -65,7 +124,15 @@ jobs:
 
   build:
     name: 🏗️ Build Plugin
-    needs: [lint-php, lint-markdown, secrets-scan]
+    needs:
+      [
+        lint-actions,
+        lint-php,
+        lint-links,
+        lint-markdown,
+        security-scan-snyk,
+        secrets-scan-trufflehog,
+      ]
     runs-on: ubuntu-latest
 
     steps:
