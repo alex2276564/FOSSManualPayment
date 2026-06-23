@@ -100,7 +100,9 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: ${{ github.event_name == 'pull_request' && 'github-pr-review' || 'github-check' }}
-          level: error
+          fail_on_error: true
+          level: any
+          filter_mode: nofilter
 
   lint-renovate:
     name: 🧹 Lint Renovate
@@ -195,9 +197,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: ${{ github.event_name == 'pull_request' && 'github-pr-review' || 'github-check' }}
-          fail_on_error: true
-          level: any
-          filter_mode: nofilter
+          fail_level: error
 
   lint-markdown:
     name: 🧹 Lint Markdown
