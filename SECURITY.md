@@ -19,7 +19,7 @@ For **enterprise-grade security requirements**, use **commercially supported sol
 Every release is built via GitHub Actions with CI runner hardening enabled.
 Each release artifact ships with a **SLSA Build Level 3** provenance file
 and a **SHA-256 checksum** — both are published on the release page and can
-be used to verify the integrity of the JAR.
+be used to verify the integrity of the ZIP archive.
 
 ## CI hardening
 
