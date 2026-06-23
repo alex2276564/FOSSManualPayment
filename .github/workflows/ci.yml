@@ -135,13 +135,17 @@ jobs:
           sfw bunx --package renovate renovate-config-validator --strict
 
   lint-php:
-    name: 🧹 Lint PHP
+    name: 🧹 Lint PHP (${{ matrix.php-label }})
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
-        php-version: ["7.4", "latest"]
+        include:
+          - php-version: '8.0'
+            php-label: '8.0 (minimum)'
+          - php-version: 'latest'
+            php-label: 'latest (maximum)'
 
     steps:
       - name: Harden Runner
