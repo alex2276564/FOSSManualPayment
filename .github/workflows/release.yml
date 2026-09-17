@@ -91,6 +91,7 @@ jobs:
       zip_file: ${{ steps.zip.outputs.zip_file }}
       zip_name: ${{ steps.zip.outputs.zip_name }}
       sha256: ${{ steps.zip.outputs.sha256 }}
+      slsa_subjects: ${{ steps.subjects.outputs.subjects_b64 }}
 
     steps:
       - name: Harden Runner
@@ -175,6 +176,18 @@ jobs:
           echo "Built ZIP: $ZIP_FILE"
           echo "SHA-256 : $SHA"
 
+      - name: Build SLSA subjects (sha256sum → base64)
+        id: subjects
+        shell: bash
+        env:
+          ZIP_FILE: ${{ steps.zip.outputs.zip_file }}
+        run: |
+          set -euo pipefail
+          # sha256sum outputs lines in the following format: "<hash>  <filename>"
+          # base64 -w0 (GNU) → a single line without line breaks; on macOS, the fallback is used without -w0
+          SUBJECTS_B64=$(sha256sum "$ZIP_FILE" | base64 -w0 2>/dev/null || sha256sum "$ZIP_FILE" | base64)
+          echo "subjects_b64=$SUBJECTS_B64" >> "$GITHUB_OUTPUT"
+
       - name: Upload ZIP as workflow artifact
         uses: actions/upload-artifact@main
         with:
@@ -199,18 +212,14 @@ jobs:
 
     permissions:
       actions: read
-      id-token: write # required for Sigstore/OIDC signing
-      contents: write # required to upload provenance as artifact
+      id-token: write   # required for Sigstore/OIDC signing
+      contents: write   # required to upload provenance as artifact
 
     # SLSA generic generator: MUST be pinned to exact semver tag (vX.Y.Z)
     uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v2.1.0
     with:
-      # Path to the artifact to attest, relative to the repository root.
-      # This path must match the ZIP produced in the build job.
-      subject-path: ${{ needs.build.outputs.zip_file }}
-
-      # Repo is public, so we explicitly allow logging to public Rekor
-      rekor-log-public: true
+      # Base64-encoded sha256sum output ("<hash>  <filename>"), produced in the build job.
+      base64-subjects: ${{ needs.build.outputs.slsa_subjects }}
 
   # ================================================================
   # 🚀 GITHUB RELEASE
@@ -235,13 +244,11 @@ jobs:
           name: module-zip
           path: dist
 
-      - name: Download SLSA attestations artifact
+      - name: Download SLSA provenance artifact
         uses: actions/download-artifact@main
         with:
-          # The artifact name varies, but always ends with “-slsa-attestations”
-          pattern: "*-slsa-attestations"
+          name: ${{ needs.provenance.outputs['provenance-name'] }}
           path: slsa
-          merge-multiple: true
 
       - name: Extract SLSA provenance file
         shell: bash
@@ -251,22 +258,22 @@ jobs:
           set -euo pipefail
           mkdir -p dist
 
-          # Unzip all .tgz files that may have arrived
+          # Unpack any .tgz archives if present (builder-style artifacts)
           shopt -s nullglob
           for tgz in slsa/**/*.tgz slsa/*.tgz; do
             echo "Unpacking $tgz"
             tar -xzf "$tgz" -C slsa
           done
 
-          # Find a .slsa file
-          SLSA_FILE=$(find slsa -type f -name '*.slsa' | head -1)
+          # Look for either .slsa or .intoto.jsonl files
+          SLSA_FILE=$(find slsa -type f \( -name '*.slsa' -o -name '*.intoto.jsonl' \) | head -1)
           if [ -z "$SLSA_FILE" ]; then
-            echo "::error::No .slsa provenance file found in SLSA artifact"
+            echo "::error::No provenance file (.slsa or .intoto.jsonl) found in 'slsa' directory"
             find slsa -maxdepth 3 -type f || true
             exit 1
           fi
 
-          # Copy it next to the ZIP file and give it a descriptive name
+          # Copy it next to the ZIP file and give it a stable, user-friendly name
           cp -- "$SLSA_FILE" "dist/${ZIP_NAME}.build.slsa"
           echo "Provenance copied to dist/${ZIP_NAME}.build.slsa"
 
@@ -277,7 +284,7 @@ jobs:
         # zizmor: softprops/action-gh-release is intentionally used over
         # `gh release` CLI — it provides atomic asset upload, glob support,
         # and release update semantics not easily replicated with the CLI.
-        uses: softprops/action-gh-release@main # zizmor: ignore[superfluous-actions]
+        uses: softprops/action-gh-release@master # zizmor: ignore[superfluous-actions]
         with:
           # No automatic "v" prefix: the tag will be exactly what you type
           # in the "release_version" input (e.g. "1.0.0").

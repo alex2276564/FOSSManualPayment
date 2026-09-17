@@ -12,7 +12,10 @@ For **enterprise-grade security requirements**, use **commercially supported sol
 **Considered attack vectors** (prioritized by likelihood/risk):
 
 1. **Supply chain**
-2. **Business logic bypass**
+2. **Dependency updating**
+3. **Business logic bypass**
+
+---
 
 ## Supply chain security
 
@@ -20,6 +23,8 @@ Every release is built via GitHub Actions with CI runner hardening enabled.
 Each release artifact ships with a **SLSA Build Level 3** provenance file
 and a **SHA-256 checksum** — both are published on the release page and can
 be used to verify the integrity of the ZIP archive.
+
+---
 
 ## CI hardening
 
@@ -32,9 +37,27 @@ when combined with manual review of every upstream commit, which this
 single-developer project cannot sustain. Runtime monitoring via Harden Runner
 is the primary supply-chain control instead.
 
+---
+
 ## Security scanning
 
 Security scans (SCA/SAST/IAST) covering the codebase, its dependencies, and the CI/GitHub Actions pipeline are run regularly: SCA/SAST checks are triggered automatically on every commit and on a daily schedule, while deeper IAST scans (using AI agents) are launched manually during major refactors or upon request.
+
+---
+
+## Dependency updating
+
+Dependencies are kept up to date using [Renovate](https://github.com/renovatebot/renovate).
+
+- **Regular (non-security) updates:**
+  - Checked at least **weekly**.
+  - A `minimumReleaseAge` of **3 days** is applied, so only versions that have been out for a while are adopted for normal updates.
+
+- **Security-related updates:**
+  - Processed **without artificial delay** — security patches are not held back by `minimumReleaseAge`.
+  - Renovate security advisories and/or GitHub’s security alerts are handled as soon as possible once available.
+
+---
 
 ## Reporting a vulnerability
 
