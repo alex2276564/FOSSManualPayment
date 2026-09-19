@@ -62,5 +62,5 @@ Dependencies are kept up to date using [Renovate](https://github.com/renovatebot
 ## Reporting a vulnerability
 
 If you discover a security vulnerability, please use the
-[Security tab](https://github.com/alex2276564/MMOSpawnPoint/security/advisories) to report it privately.  
+[Security tab](https://github.com/alex2276564/FOSSManualPayment/security/advisories) to report it privately.  
 Do **not** disclose security vulnerabilities publicly before they have been addressed.
