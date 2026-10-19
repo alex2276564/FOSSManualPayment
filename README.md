@@ -4,6 +4,7 @@
 [![PHP Version](https://img.shields.io/badge/PHP-8.0%2B-8892BF)](https://www.php.net/downloads.php)
 [![Version](https://img.shields.io/github/v/release/alex2276564/FOSSManualPayment?color=blue)](https://github.com/alex2276564/FOSSManualPayment/releases/latest)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![SLSA 3](https://slsa.dev/images/gh-badge-level3.svg)](https://slsa.dev)
 
 **FOSSManualPayment** is a flexible payment gateway plugin for FOSSBilling that allows administrators to set up custom manual payment instructions.
 
