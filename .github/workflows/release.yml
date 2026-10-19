@@ -68,14 +68,14 @@ jobs:
           set -euo pipefail
 
           # Extract version from the getConfig() array in FOSSManualPayment.php
-          VERSION=$(grep -E "'version'\s*=>\s*'[^']+'" FOSSManualPayment.php \
+          VERSION=$(grep -E "'version'\s*=>\s*'[^']+'" "${MODULE_NAME}.php" \
             | head -1 \
             | sed -E "s/.*'version'\s*=>\s*'([^']+)'.*/\1/")
 
           echo "Detected module version: $VERSION"
 
           if [ -z "$VERSION" ]; then
-            echo "::error::Could not extract version from FOSSManualPayment.php"
+            echo "::error::Could not extract version from ${MODULE_NAME}.php"
             exit 1
           fi
 
@@ -87,11 +87,11 @@ jobs:
       - name: Create directories
         run: mkdir -p library/Payment/Adapter data/assets/gateways
 
-      - name: Move FOSSManualPayment.php
-        run: mv FOSSManualPayment.php library/Payment/Adapter/
+      - name: Move module PHP file
+        run: mv "${MODULE_NAME}.php" library/Payment/Adapter/
 
-      - name: Move FOSSManualPayment.png
-        run: mv FOSSManualPayment.png data/assets/gateways/
+      - name: Move module icon
+        run: mv "${MODULE_NAME}.png" data/assets/gateways/
 
       - name: Build release ZIP (reproducible)
         run: |
@@ -104,7 +104,7 @@ jobs:
           # Normalize timestamps for deterministic ZIP contents
           find library data -exec touch -d "@$SOURCE_DATE_EPOCH" {} +
 
-          ZIP_FILE=FOSSManualPayment.zip
+          ZIP_FILE="${MODULE_NAME}.zip"
 
           # -X strips extra file attributes to improve reproducibility
           zip -X -r "$ZIP_FILE" library data
@@ -114,7 +114,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          ZIP_FILE=FOSSManualPayment.zip
+          ZIP_FILE="${MODULE_NAME}.zip"
 
           if [ ! -f "$ZIP_FILE" ]; then
             echo "::error::No ZIP found: $ZIP_FILE"
