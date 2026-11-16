@@ -36,7 +36,7 @@ jobs:
 
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@v2.22.3
+        uses: step-security/harden-runner@v2.22.4
         with:
           egress-policy: audit
 
@@ -75,7 +75,7 @@ jobs:
 
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@v2.22.3
+        uses: step-security/harden-runner@v2.22.4
         with:
           egress-policy: audit
 
@@ -110,7 +110,7 @@ jobs:
 
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@v2.22.3
+        uses: step-security/harden-runner@v2.22.4
         with:
           egress-policy: audit
 
@@ -133,7 +133,7 @@ jobs:
 
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@v2.22.3
+        uses: step-security/harden-runner@v2.22.4
         with:
           egress-policy: audit
 
@@ -161,7 +161,7 @@ jobs:
 
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@v2.22.3
+        uses: step-security/harden-runner@v2.22.4
         with:
           egress-policy: audit
 
@@ -226,7 +226,7 @@ jobs:
 
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@v2.22.3
+        uses: step-security/harden-runner@v2.22.4
         with:
           egress-policy: audit
 
@@ -236,7 +236,7 @@ jobs:
           persist-credentials: false
 
       - name: Run jactionlint (pedantic + online + strict exit)
-        uses: jdx/jactionlint@v2.5.0
+        uses: jdx/jactionlint@v2.6.0
         with:
           profile: pedantic
           online: strict
@@ -253,7 +253,7 @@ jobs:
 
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@v2.22.3
+        uses: step-security/harden-runner@v2.22.4
         with:
           egress-policy: audit
 
@@ -301,7 +301,7 @@ jobs:
 
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@v2.22.3
+        uses: step-security/harden-runner@v2.22.4
         with:
           egress-policy: audit
 
@@ -322,7 +322,7 @@ jobs:
 
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@v2.22.3
+        uses: step-security/harden-runner@v2.22.4
         with:
           egress-policy: audit
 
@@ -334,14 +334,14 @@ jobs:
 
       - name: TruffleHog Secrets Scan (full)
         if: ${{ github.event_name != 'pull_request' }}
-        uses: trufflesecurity/trufflehog@v3.99.8
+        uses: trufflesecurity/trufflehog@v3.99.9
         with:
           path: ./
           extra_args: --results=verified,unknown
 
       - name: TruffleHog Secrets Scan (diff)
         if: ${{ github.event_name == 'pull_request' }}
-        uses: trufflesecurity/trufflehog@v3.99.8
+        uses: trufflesecurity/trufflehog@v3.99.9
         with:
           path: ./
           base: ${{ github.event.pull_request.base.sha }}
@@ -368,7 +368,7 @@ jobs:
 
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@v2.22.3
+        uses: step-security/harden-runner@v2.22.4
         with:
           egress-policy: audit
 
@@ -413,7 +413,7 @@ jobs:
 
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@v2.22.3
+        uses: step-security/harden-runner@v2.22.4
         with:
           egress-policy: audit
 
